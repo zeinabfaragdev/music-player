@@ -99,12 +99,27 @@ function updateProgressBar(e) {
     if (currentSeconds < 10) {
       currentSeconds = `0${currentSeconds}`;
     }
-    if (currentSeconds) {
-      currentTimeEl.textContent = `${currentMinutes}:${currentSeconds}`;
-    }
+    currentTimeEl.textContent = `${currentMinutes}:${currentSeconds}`;
+  }
+}
+
+function setProgressBar(e) {
+  const { clientWidth: width } = e.srcElement;
+  const clickX = e.offsetX;
+  const { duration } = music;
+  music.currentTime = (clickX / width) * duration;
+}
+
+function playMusic(e) {
+  if (e.keyCode === 32) {
+    isPlaying ? pauseSong() : playSong();
   }
 }
 
 prevBtn.addEventListener("click", prevSong);
 nextBtn.addEventListener("click", nextSong);
 music.addEventListener("timeupdate", updateProgressBar);
+music.addEventListener("ended", nextSong);
+progressContainer.addEventListener("click", setProgressBar);
+
+window.addEventListener("keydown", playMusic);
